@@ -1,0 +1,83 @@
+# =====================================================
+# AI_NEET
+# =====================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache
+cache/
+
+# OCR Output
+output/
+
+# Vector Database
+vectordb/
+
+# Embeddings
+embeddings/
+
+# Models
+models/
+
+# Temporary Files
+*.tmp
+*.temp
+
+# OS Files
+Thumbs.db
+.DS_Store
+
+# Python Build
+build/
+dist/
+*.egg-info/
+
+# Pytest
+.pytest_cache/
+
+# Mypy
+.mypy_cache/
+
+# Ruff
+.ruff_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment Variables
+.env
+
+# Ollama Cache (Optional)
+ollama_models/
+
+# Generated Images
+*.png
+*.jpg
+*.jpeg

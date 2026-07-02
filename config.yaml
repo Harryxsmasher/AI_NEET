@@ -1,0 +1,83 @@
+application:
+
+  name: AI_NEET
+
+  version: 1.0.0
+
+  author: Praveen Mark
+
+  mode: development
+
+logging:
+
+  level: INFO
+
+  folder: logs
+
+database:
+
+  sqlite: database/ai_neet.db
+
+cache:
+
+  root: cache
+
+vector_db:
+
+  folder: vectordb
+
+embedding:
+
+  model: all-MiniLM-L6-v2
+
+chunking:
+
+  chunk_size: 1000
+
+  overlap: 150
+
+documents:
+
+  root: data
+
+output:
+
+  folder: output
+
+templates:
+
+  folder: templates
+
+assets:
+
+  folder: assets
+
+renderer:
+
+  auto_open_browser: true
+
+ocr:
+
+  enabled: false
+
+llm:
+
+  provider: ollama
+
+  host: http://localhost:11434
+
+  model: qwen2.5:7b
+
+  timeout: 600
+
+  temperature: 0.1
+
+  num_predict: 1024
+
+  num_ctx: 8192
+
+system:
+
+  supported_exam:
+
+    - NEET
