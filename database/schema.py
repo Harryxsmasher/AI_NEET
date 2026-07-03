@@ -54,6 +54,30 @@ SCHEMA = [
 
     );
     """,
+    """
+CREATE TABLE IF NOT EXISTS knowledge_objects (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    chunk_id INTEGER NOT NULL,
+
+    subject TEXT,
+
+    chapter TEXT,
+
+    topics TEXT,
+
+    keywords TEXT,
+
+    summary TEXT,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY(chunk_id)
+        REFERENCES knowledge_chunks(id)
+
+);
+""",
 
     """
     CREATE TABLE IF NOT EXISTS questions (
@@ -182,6 +206,20 @@ ON documents(source_type);
 """
 CREATE INDEX IF NOT EXISTS idx_documents_year
 ON documents(exam_year);
+""",
+"""
+CREATE INDEX IF NOT EXISTS idx_knowledge_subject
+ON knowledge_objects(subject);
+""",
+
+"""
+CREATE INDEX IF NOT EXISTS idx_knowledge_chapter
+ON knowledge_objects(chapter);
+""",
+
+"""
+CREATE INDEX IF NOT EXISTS idx_knowledge_chunk
+ON knowledge_objects(chunk_id);
 """,
 
     """

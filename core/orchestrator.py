@@ -29,6 +29,16 @@ from ai.validator import AIValidator
 from ai.document_assembler import DocumentAssembler
 from core.document_registry import DocumentRegistry
 from ai.knowledge_parser import KnowledgeParser
+from knowledge.knowledge_repository import KnowledgeRepository
+from knowledge.embeddings import KnowledgeEmbeddingEngine
+from vectordb.faiss_store import FAISSStore
+from knowledge.index_builder import KnowledgeIndexBuilder   
+from knowledge.knowledge_graph import KnowledgeGraph
+from ai.tutor import Tutor
+from knowledge.retriever import KnowledgeRetriever
+from analysis.pyq_analyzer import PYQAnalyzer
+from services.chapter_service import ChapterService
+
 
 input_folder = Path("data")
 
@@ -86,6 +96,83 @@ class AINEETSystem:
 
         self.knowledge_parser = KnowledgeParser(
             self.llm
+        )
+
+        # ------------------------------------
+        # Knowledge Engine
+        # ------------------------------------
+
+        self.knowledge_repository = KnowledgeRepository()
+
+        # ------------------------------------
+        # Embedding Engine
+        # ------------------------------------
+
+        self.embedding_engine = KnowledgeEmbeddingEngine()
+
+        # ------------------------------------
+        # Vector Database
+        # ------------------------------------
+
+        self.vector_store = FAISSStore()
+
+        self.vector_store.create_index()
+
+        # ------------------------------------
+        # AI Tutor
+        # ------------------------------------
+        
+
+        # ------------------------------------
+        # Knowledge Index Builder
+        # ------------------------------------
+
+        self.index_builder = KnowledgeIndexBuilder()
+
+        # ------------------------------------
+        # Knowledge Graph
+        # ------------------------------------
+
+        self.knowledge_graph = KnowledgeGraph()
+
+        # ------------------------------------
+        # Knowledge Retriever
+        # ------------------------------------
+
+        self.retriever = KnowledgeRetriever()
+
+        # ------------------------------------
+        # PYQ Intelligence
+        # ------------------------------------
+
+        self.pyq_analyzer = PYQAnalyzer()
+
+        # ------------------------------------
+        # Chapter Intelligence Service
+        # ------------------------------------
+
+        self.chapter_service = ChapterService(
+
+            self.knowledge_repository,
+
+            self.knowledge_graph
+
+        )
+
+        # ------------------------------------
+        # AI Tutor
+        # ------------------------------------
+
+        self.tutor = Tutor(
+
+            self.retriever,
+
+            self.knowledge_graph,
+
+            self.pyq_analyzer,
+
+            self.llm
+
         )
 
         # ------------------------------------
@@ -153,6 +240,84 @@ class AINEETSystem:
 
     # ==================================================
 
+    # ==================================================
+
+    def test_embedding_engine(self):
+
+        print()
+
+        print("=" * 70)
+        print("EMBEDDING ENGINE TEST")
+        print("=" * 70)
+
+        knowledge = {
+
+            "subject": "Biology",
+
+            "chapter": "The Living World",
+
+            "topics": [
+
+                "Classification",
+
+                "Taxonomy"
+
+            ],
+
+            "keywords": [
+
+                "Species",
+
+                "Kingdom",
+
+                "Genus"
+
+            ],
+
+            "summary":
+
+                "Biology studies living organisms."
+
+        }
+
+        result = self.embedding_engine.embed_knowledge(
+
+            knowledge
+
+        )
+
+        print()
+
+        print("=" * 70)
+        print("TEXT USED FOR EMBEDDING")
+        print("=" * 70)
+
+        print(
+
+            result["text"]
+
+        )
+
+        print()
+
+        print("=" * 70)
+        print("VECTOR INFORMATION")
+        print("=" * 70)
+
+        print(
+
+            f"Dimensions : {len(result['vector'])}"
+
+        )
+
+        print(
+
+            result["vector"][:10]
+
+        )
+
+        print("=" * 70)
+
     def verify_folders(self):
 
         folders = [
@@ -214,6 +379,84 @@ class AINEETSystem:
 
     # ==================================================
 
+    def test_knowledge_graph(self):
+
+        print()
+
+        print("=" * 70)
+        print("KNOWLEDGE GRAPH TEST")
+        print("=" * 70)
+
+        knowledge_objects = self.knowledge_repository.get_all()
+
+        print(
+            f"Knowledge Objects : {len(knowledge_objects)}"
+        )
+
+        print()
+
+        self.knowledge_graph.build(
+
+            knowledge_objects
+
+        )
+
+        self.knowledge_graph.print_summary()
+
+    # ==================================================
+
+    # ==================================================
+
+    def test_chapter_service(self):
+
+        print()
+
+        print("=" * 70)
+        print("CHAPTER SERVICE TEST")
+        print("=" * 70)
+
+        result = self.chapter_service.get_chapter_statistics(
+
+            "Biology",
+
+            "The Living World"
+
+        )
+
+        print()
+
+        print(result)
+
+        print()
+
+        print("=" * 70)
+
+    # ==================================================
+
+    def test_ai_tutor(self):
+
+        print()
+
+        print("=" * 70)
+        print("AI TUTOR")
+        print("=" * 70)
+
+        question = input(
+
+            "\nAsk AI_NEET : "
+
+        )
+
+        print()
+
+        answer = self.tutor.ask(
+
+            question
+
+        )
+
+        print(answer)
+
     def run(self):
 
         self.logger.info(
@@ -260,6 +503,26 @@ class AINEETSystem:
             elif choice == "8":
 
                 self.test_document_assembler()
+
+            elif choice == "9":
+
+                self.test_embedding_engine()
+
+            elif choice == "10":
+
+                self.test_index_builder()
+            
+            elif choice == "11":
+
+                self.test_knowledge_graph()
+            
+            elif choice == "12":
+
+                self.test_ai_tutor()
+
+            elif choice == "13":
+
+                self.test_chapter_service()
                 
                 
 
@@ -289,11 +552,40 @@ class AINEETSystem:
         print("6. Exit")
         print("7. Test AI Parser")
         print("8. Test Document Assembler")
-        
+        print("9. Test Embedding Engine")
+        print("10. Build Vector Index")
+        print("11. Build Knowledge Graph")
+        print("12. Ask AI Tutor")
+        print("13. Test Chapter Service")
 
         print("=" * 70)
 
     # ==================================================
+
+    # ==================================================
+
+    def test_index_builder(self):
+
+        print()
+
+        print("=" * 70)
+        print("VECTOR INDEX TEST")
+        print("=" * 70)
+
+        print(
+            f"Knowledge Objects in DB : "
+            f"{self.knowledge_repository.count()}"
+        )
+
+        print()
+
+        self.index_builder.build()
+
+        print()
+
+        print("=" * 70)
+        print("VECTOR INDEX CREATED")
+        print("=" * 70)
 
     def build_knowledge_base(self):
 
@@ -436,6 +728,27 @@ class AINEETSystem:
             assembled_documents
 
         )
+        print()
+
+        print("=" * 70)
+        print("STEP 6 : STORING KNOWLEDGE")
+        print("=" * 70)
+
+        # stored = self.knowledge_repository.insert_many(
+
+        #     knowledge_objects
+
+        # )
+
+        # ------------------------------------
+        # Store AI Knowledge
+        # ------------------------------------
+
+        stored = self.knowledge_repository.insert_many(
+
+            knowledge_objects
+
+        )
 
         print()
         print("=" * 70)
@@ -470,6 +783,18 @@ class AINEETSystem:
         print(
             f"Knowledge Objects : {len(knowledge_objects)}"
         )
+
+        print(
+
+            f"Knowledge Stored : {stored}"
+
+        )
+
+        # print(
+
+        #     f"Knowledge Stored : {stored}"
+
+        # )
 
         print("=" * 70)
 

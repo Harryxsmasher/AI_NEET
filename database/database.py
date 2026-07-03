@@ -335,6 +335,22 @@ class DatabaseManager:
         return result[0]
     #-----------------------------------------------------------
 
+        # --------------------------------------------------
+
+    def knowledge_count(self):
+
+        result = self.fetchone(
+
+            """
+            SELECT COUNT(*)
+
+            FROM knowledge_objects
+            """
+
+        )
+
+        return result[0]
+
     def close(self):
 
         if self.connection:
